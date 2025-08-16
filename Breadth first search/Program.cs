@@ -38,21 +38,32 @@
             Queue<string> queue = new Queue<string>();
 
             queue = new Queue<string>(queue.Concat(graph[name]));
-            
+            HashSet<string> visited = new HashSet<string>();
+
             while (queue.Count > 0)
             {
                 string person = queue.Dequeue();
-                if (isSeller(person))
+                if (!isVisited(person, visited))
                 {
-                    Console.WriteLine(person + " is a mango seller");
-                    return true;
+                    if (isSeller(person))
+                    {
+                        Console.WriteLine(person + " is a mango seller");
+                        return true;
+                    }
+                    foreach (string neighbor in graph[person])
+                    {
+                        queue.Enqueue(neighbor);
+                        
+                    }
+                    visited.Add(person);
                 }
-                foreach (string neighbor in graph[person])
-                {
-                    queue.Enqueue(neighbor);
-                }
+               
             }
             return false;
+        }
+        public static bool isVisited(string name, HashSet<string> visited)
+        {
+            return visited.Contains(name);
         }
     }
 }
